@@ -3,18 +3,15 @@ venv/
 
 
 # Ignora arquivos de dados
-/src/data/raw/**
-/src/data/bronze/**
-/src/data/silver/**
-/src/data/gold/**
-/src/data/quarantine/**
-/src/data/tmp/**
-/src/data/temp/**
 
 /src/data/**/*.csv
 /src/data/**/*.parquet
 /src/data/**/*.xlsx
 /src/data/**/*.json
+
+!src/data/
+!src/data/**/
+!src/data/.gitkeep
 
 *.zip
 *.tar.gz

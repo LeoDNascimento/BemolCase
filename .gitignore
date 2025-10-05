@@ -2,20 +2,20 @@ venv/
 .env
 
 
-# Ignora todas as camadas do pipeline
-src/data/raw/
-src/data/bronze/
-src/data/silver/
-src/data/gold/
-src/data/quarantine/
+# Ignora arquivos de dados
+/src/data/raw/**
+/src/data/bronze/**
+/src/data/silver/**
+/src/data/gold/**
+/src/data/quarantine/**
+/src/data/tmp/**
+/src/data/temp/**
 
-# Ignora dados temporários
-src/data/tmp/
-src/data/temp/
-*.csv
-*.parquet
-*.xlsx
-*.json
+/src/data/**/*.csv
+/src/data/**/*.parquet
+/src/data/**/*.xlsx
+/src/data/**/*.json
+
 *.zip
 *.tar.gz
 *.bak

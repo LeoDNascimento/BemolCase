@@ -1,2 +1,22 @@
 venv/
 .env
+
+
+# Ignora todas as camadas do pipeline
+src/data/raw/
+src/data/bronze/
+src/data/silver/
+src/data/gold/
+src/data/quarantine/
+
+# Ignora dados temporários
+src/data/tmp/
+src/data/temp/
+*.csv
+*.parquet
+*.xlsx
+*.json
+*.zip
+*.tar.gz
+*.bak
+*.log

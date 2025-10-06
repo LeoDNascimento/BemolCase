@@ -13,8 +13,8 @@ def load_config(path="config.yaml"):
     with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
+# Remove acentos, deixa minúsculo, tira símbolos e espaços extras.
 def normalize(s: str) -> str:
-    """Remove acentos, deixa minúsculo, tira símbolos e espaços extras."""
     if pd.isna(s):
         return ""
     s = str(s).strip().lower()

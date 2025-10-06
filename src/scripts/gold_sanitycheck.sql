@@ -1,7 +1,9 @@
+-- Conta quantas linhas tem na gold e na silver
 SELECT
   (SELECT COUNT(*) FROM gold_cubo_clientes) AS cubo_rows,
   (SELECT COUNT(*) FROM silver_clientes)    AS clientes_rows;
 
+-- Confere se tem duplicidade de IDs
 SELECT "ID_PESSOA", COUNT(*) AS n
   FROM gold_cubo_clientes
   GROUP BY "ID_PESSOA"

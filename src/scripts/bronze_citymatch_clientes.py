@@ -32,8 +32,8 @@ def read_csv_tolerant(path: Path) -> pd.DataFrame:
             continue
     raise ValueError(f"Falha ao ler {path.name}")
 
+# Remove acentos, baixa, tira símbolos e colapsa espaços.
 def clean(s: str) -> str:
-    """Remove acentos, baixa, tira símbolos e colapsa espaços."""
     if pd.isna(s):
         return ""
     s = str(s).strip().lower()
@@ -57,17 +57,18 @@ def main():
     out_auditoria = part / "clientes" / "city_mapping_audit.csv"
     out_clientes.parent.mkdir(parents=True, exist_ok=True)
 
-    # 1) ler clientes
+    # ler clientes
     df = read_csv_tolerant(in_clientes)
     if "CIDADE" not in df.columns:
         raise ValueError("Coluna 'CIDADE' não encontrada em clientes_validated.csv")
 
-    # 2) lista canônica: tenta ler de arquivo; se não existir, infere do próprio dado
+    # lista canônica: tenta ler de arquivo; se não existir, infere do próprio dado
+    # Só está funcionando com a dim, os dados errados são uma amostra muito grande
     canon_file = Path("src/dim/canon_cidades.txt")  # 1 cidade por linha (ex.: Manaus)
     if canon_file.exists():
         canon = [line.strip() for line in canon_file.read_text(encoding="utf-8").splitlines() if line.strip()]
     else:
-        # fallback: inferir top 30 formas mais frequentes (pelo texto original Title Case)
+        # fallback: inferir top 5 formas mais frequentes (pelo texto original Title Case)
         top = (
             df["CIDADE"]
             .dropna()
@@ -75,16 +76,16 @@ def main():
             .str.strip()
             .str.title()
             .value_counts()
-            .head(30)
+            .head(5)
             .index.tolist()
         )
         canon = top
 
-    # 3) preparar estruturas para fuzzy (chaves limpas)
+    # preparar estruturas para fuzzy (chaves limpas)
     canon_clean = {clean(c): c for c in canon if clean(c)}
     canon_keys = list(canon_clean.keys())
 
-    # função de mapeamento no estilo do seu exemplo
+    # função de mapeamento
     def map_city(x: str, threshold: int = 80) -> tuple[str, str, float]:
         """
         Retorna (canonical, matched_key, score)
@@ -100,13 +101,13 @@ def main():
             return canon_clean[best[0]], best[0], float(best[1])
         return x, "", float(best[1] if best else 0.0)  # mantém original para revisão
 
-    # 4) aplicar
+    # aplicar
     mapped = df["CIDADE"].astype(str).apply(map_city)
     df["CIDADE_PADRONIZADA"] = mapped.map(lambda t: titlecase(t[0]))
     df["CITY_MATCH_KEY"] = mapped.map(lambda t: t[1])
     df["CITY_MATCH_SCORE"] = mapped.map(lambda t: t[2])
 
-    # 5) salvar tabela final e auditoria
+    # salvar tabela final e auditoria
     df.to_csv(out_clientes, index=False)
 
     audit = (

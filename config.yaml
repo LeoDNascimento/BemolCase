@@ -1,11 +1,11 @@
 project:
   name: bemol_analytics
 paths:
-  data_root: "./data"
-  raw_dir: "./data/raw"
-  bronze_landing: "./data/bronze/landing"
-  bronze_validated: "./data/bronze/validated"
-  catalog_dir: "./catalog"
+  data_root: "./src/data"
+  raw_dir: "./src/data/raw"
+  bronze_landing: "./src/data/bronze/landing"
+  bronze_validated: "./src/data/bronze/validated"
+  catalog_dir: "./src/catalog"
 files:
   clientes: "BemolDesafioProdutosFinanceirosClientes.csv"
   transacoes: "BemolDesafioProdutosFinanceirosTransacoes.csv"

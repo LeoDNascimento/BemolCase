@@ -8,6 +8,7 @@ venv/
 /src/data/**/*.parquet
 /src/data/**/*.xlsx
 /src/data/**/*.json
+/src/data/**/*.jsonl
 
 !src/data/
 !src/data/**/
